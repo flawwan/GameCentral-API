@@ -3,7 +3,7 @@
 class Api
 {
 	private $db = null;
-	private $match;//id
+	private $match; //id
 	private $currentPlayer;
 
 	function __construct($db)
@@ -34,21 +34,10 @@ class Api
 	{
 		$dataRecieve = isset($_GET['data']) ? $_GET['data'] : null;
 		$player = $this->getCurrentPlayerData();
-		if ($dataRecieve == null || $player["turn"] == 0) {
+
+		if ($dataRecieve == null || (TURN_BASED && $player["turn"] == 0)) {
 			exit();
 		}
-
-//		$oldPosition = explode(":", $player["pos"]);
-//		$newPosition = explode(":", $dataRecieve);
-//
-//		//cheat detection
-//		$x = abs($oldPosition[0] - $newPosition[0]);
-//		$y = abs($oldPosition[1] - $newPosition[1]);
-//
-//		if ($x + $y > 10) {
-//			exit(); //Cheat
-//		}
-
 		//Sätt din data
 		$sth = $this->db->prepare("UPDATE `players` SET `data`=:data WHERE `player`=:user AND `match_id`=:match");
 		$sth->execute(array(':data' => $dataRecieve, ':user' => $this->currentPlayer, ':match' => $this->match));

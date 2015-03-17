@@ -49,7 +49,6 @@ class Server
 			//Nu vet vi att servern har skickat förfrågan samt att vi nu måste lägga till spelarna i vår databas.
 			$this->db->beginTransaction();
 
-
 			//Lägg sedan till alla spelare i players vektorn med den matchens id som returnerades ovan.
 			$players = isset($_POST['keys']) ? json_decode($_POST['keys']) : array();
 
@@ -69,14 +68,11 @@ class Server
 	private function createPlayers($players, $matchID)
 	{
 		$playerIndex = 0;
-		$sth = $this->db->prepare("INSERT INTO `players`(`player`,`match_id`,`name`, `pos`) VALUES(:player,:matchID, :name, :pos)");
+		$sth = $this->db->prepare("INSERT INTO `players`(`player`,`match_id`,`name`) VALUES(:player,:matchID, :name)");
 		foreach ($players as $player) {
-			$pos = mt_rand(0, 20) . ":" . mt_rand(0, 20); //Generate random coordinates
-
 			$sth->bindParam(':player', $player[0]);
 			$sth->bindParam(':name', $player[1]);
 			$sth->bindParam(':matchID', $matchID);
-			$sth->bindParam(':pos', $pos);
 			$sth->execute();
 
 			$playerID = $this->db->lastInsertId();

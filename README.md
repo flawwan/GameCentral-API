@@ -1,1 +1,2 @@
-2d canvas multiplayer game
+#Hur man installerar
+>https://github.com/flawwan/GameCentral-API/wiki
